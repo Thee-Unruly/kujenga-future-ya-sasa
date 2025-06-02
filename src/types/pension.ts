@@ -1,18 +1,45 @@
+// Define constrained types for clarity
+type IncomeType = 'monthly' | 'seasonal' | 'random';
+type RiskProfile = 'low' | 'medium' | 'high';
+type Month =
+  | 'January'
+  | 'February'
+  | 'March'
+  | 'April'
+  | 'May'
+  | 'June'
+  | 'July'
+  | 'August'
+  | 'September'
+  | 'October'
+  | 'November'
+  | 'December';
 
 export interface PensionData {
-  incomeType: 'monthly' | 'seasonal' | 'random';
-  monthlyIncome: number;
-  seasonalIncomes: SeasonalIncome[];
-  currentAge: number;
-  retirementAge: number;
-  monthlyExpenses: number;
-  investmentRisk: 'low' | 'medium' | 'high';
-  contributionPercentage: number;
+  incomeType: IncomeType;
+  monthlyIncome?: number; // Optional for seasonal/random
+  seasonalIncomes?: SeasonalIncome[]; // Optional for seasonal
+  gigIncomes?: GigIncome[]; // Optional for random
+  currentAge: number; // Should be >= 18
+  retirementAge: number; // Should be >= currentAge
+  monthlyExpenses: number; // Should be >= 0
+  investmentRisk: RiskProfile;
+  contributionPercentage: number; // Should be 0–100
+  inflationRate?: number; // e.g., 0.055 for 5.5%
+  withdrawalRate?: number; // e.g., 0.04 for 4%
+  postRetirementExpenseRatio?: number; // e.g., 0.8 for 80%
+  lifeExpectancy?: number; // e.g., 80 years
 }
 
 export interface SeasonalIncome {
-  month: string;
-  amount: number;
+  month: Month; // Constrained to valid months
+  amount: number; // Should be >= 0
+}
+
+export interface GigIncome {
+  id: string; // Unique identifier for each gig
+  amount: number; // Should be >= 0
+  frequencyPerYear: number; // e.g., 12 for monthly gigs
 }
 
 export interface PensionResults {
@@ -22,7 +49,8 @@ export interface PensionResults {
   fundingGap: number;
   yearsToRetirement: number;
   projectionData: ProjectionDataPoint[];
-  scenarios: ScenarioResult[];
+  scenarios?: ScenarioResult[]; // Optional for flexibility
+  error?: string; // Optional for error reporting
 }
 
 export interface ProjectionDataPoint {
@@ -30,12 +58,12 @@ export interface ProjectionDataPoint {
   year: number;
   contribution: number;
   balance: number;
-  inflationAdjustedBalance: number;
+  inflationAdjustedBalance?: number; // Optional to support cases without inflation adjustment
 }
 
 export interface ScenarioResult {
-  scenario: string;
+  scenario: 'Conservative' | 'Expected' | 'Optimistic'; // Constrained scenarios
   finalCorpus: number;
-  probability: number;
-  risk: string;
+  probability: number; // Should be 0–100
+  risk: RiskProfile; // Align with investmentRisk
 }
