@@ -1,6 +1,6 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { PensionResults } from "@/types/pension";
 
 interface ResultsSummaryProps {
@@ -48,16 +48,14 @@ export const ResultsSummary = ({ results }: ResultsSummaryProps) => {
                 <div className="bg-blue-50 rounded-lg p-4 animate-fade-in">
                   <div className="flex items-center gap-2">
                     <div className="text-sm text-blue-600 font-medium">Projected Corpus</div>
-                    <TooltipProvider>
-                      <Tooltip>
-                        <TooltipTrigger>
-                          <span className="text-gray-500">ⓘ</span>
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          <p>Estimated savings at retirement based on current contributions.</p>
-                        </TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger>
+                        <span className="text-gray-500">ⓘ</span>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Estimated savings at retirement based on current contributions.</p>
+                      </TooltipContent>
+                    </Tooltip>
                   </div>
                   <div className="text-2xl font-bold text-blue-800">
                     {formatCurrency(results.projectedCorpus)}
@@ -70,16 +68,14 @@ export const ResultsSummary = ({ results }: ResultsSummaryProps) => {
                 <div className="bg-purple-50 rounded-lg p-4 animate-fade-in" style={{ animationDelay: '0.1s' }}>
                   <div className="flex items-center gap-2">
                     <div className="text-sm text-purple-600 font-medium">Required Corpus</div>
-                    <TooltipProvider>
-                      <Tooltip>
-                        <TooltipTrigger>
-                          <span className="text-gray-500">ⓘ</span>
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          <p>Amount needed for a comfortable retirement.</p>
-                        </TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger>
+                        <span className="text-gray-500">ⓘ</span>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Amount needed for a comfortable retirement.</p>
+                      </TooltipContent>
+                    </Tooltip>
                   </div>
                   <div className="text-2xl font-bold text-purple-800">
                     {formatCurrency(results.requiredCorpus)}
@@ -92,16 +88,14 @@ export const ResultsSummary = ({ results }: ResultsSummaryProps) => {
                 <div className="bg-gray-50 rounded-lg p-4 animate-fade-in" style={{ animationDelay: '0.2s' }}>
                   <div className="flex items-center gap-2">
                     <div className="text-sm text-gray-600 font-medium">Monthly Contribution</div>
-                    <TooltipProvider>
-                      <Tooltip>
-                        <TooltipTrigger>
-                          <span className="text-gray-500">ⓘ</span>
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          <p>Your current monthly contribution to retirement savings.</p>
-                        </TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger>
+                        <span className="text-gray-500">ⓘ</span>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Your current monthly contribution to retirement savings.</p>
+                      </TooltipContent>
+                    </Tooltip>
                   </div>
                   <div className="text-xl font-bold text-gray-800">
                     {formatCurrency(results.monthlyContribution)}
@@ -119,20 +113,18 @@ export const ResultsSummary = ({ results }: ResultsSummaryProps) => {
                     <div className={`text-sm font-medium ${isShortfall ? 'text-red-600' : 'text-green-600'}`}>
                       {isShortfall ? 'Funding Shortfall' : 'Surplus'}
                     </div>
-                    <TooltipProvider>
-                      <Tooltip>
-                        <TooltipTrigger>
-                          <span className="text-gray-500">ⓘ</span>
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          <p>
-                            {isShortfall
-                              ? 'The amount by which your projected savings fall short of the required amount.'
-                              : 'The amount by which your projected savings exceed the required amount.'}
-                          </p>
-                        </TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger>
+                        <span className="text-gray-500">ⓘ</span>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>
+                          {isShortfall
+                            ? 'The amount by which your projected savings fall short of the required amount.'
+                            : 'The amount by which your projected savings exceed the required amount.'}
+                        </p>
+                      </TooltipContent>
+                    </Tooltip>
                   </div>
                   <div className={`text-2xl font-bold ${isShortfall ? 'text-red-800' : 'text-green-800'}`}>
                     {formatCurrency(Math.abs(results.fundingGap))}
@@ -146,16 +138,14 @@ export const ResultsSummary = ({ results }: ResultsSummaryProps) => {
                   <div className="bg-orange-50 rounded-lg p-4 animate-fade-in" style={{ animationDelay: '0.1s' }}>
                     <div className="flex items-center gap-2">
                       <div className="text-sm text-orange-600 font-medium">💡 Recommendation</div>
-                      <TooltipProvider>
-                        <Tooltip>
-                          <TooltipTrigger>
-                            <span className="text-gray-500">ⓘ</span>
-                          </TooltipTrigger>
-                          <TooltipContent>
-                            <p>Suggested monthly contribution to close the funding gap.</p>
-                          </TooltipContent>
-                        </Tooltip>
-                      </TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger>
+                          <span className="text-gray-500">ⓘ</span>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>Suggested monthly contribution to close the funding gap.</p>
+                        </TooltipContent>
+                      </Tooltip>
                     </div>
                     <div className="text-xs text-orange-700 mt-1">
                       Consider increasing your contribution to{" "}
@@ -168,16 +158,14 @@ export const ResultsSummary = ({ results }: ResultsSummaryProps) => {
                 <div className="bg-gray-100 rounded-lg p-4 animate-fade-in" style={{ animationDelay: '0.2s' }}>
                   <div className="flex items-center gap-2">
                     <div className="text-sm text-gray-600 font-medium mb-2">Goal Achievement</div>
-                    <TooltipProvider>
-                      <Tooltip>
-                        <TooltipTrigger>
-                          <span className="text-gray-500">ⓘ</span>
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          <p>Percentage of the required corpus you are projected to achieve.</p>
-                        </TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger>
+                        <span className="text-gray-500">ⓘ</span>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Percentage of the required corpus you are projected to achieve.</p>
+                      </TooltipContent>
+                    </Tooltip>
                   </div>
                   <div className="w-full bg-gray-200 rounded-full h-3">
                     <div

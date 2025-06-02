@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { PensionData } from "@/types/pension";
 
 interface IncomeModelingCardProps {
@@ -87,16 +87,14 @@ export const IncomeModelingCard = ({ data, onUpdate }: IncomeModelingCardProps) 
               <Label htmlFor="incomeType" className="text-sm font-medium text-gray-700">
                 Income Type
               </Label>
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger>
-                    <span className="text-gray-500">ⓘ</span>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>Choose the pattern that best describes your income flow.</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger>
+                  <span className="text-gray-500">ⓘ</span>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Choose the pattern that best describes your income flow.</p>
+                </TooltipContent>
+              </Tooltip>
             </div>
             <Select value={data.incomeType} onValueChange={handleIncomeTypeChange}>
               <SelectTrigger className="w-full mt-1">
@@ -117,16 +115,14 @@ export const IncomeModelingCard = ({ data, onUpdate }: IncomeModelingCardProps) 
                 <Label htmlFor="monthlyIncome" className="text-sm font-medium text-gray-700">
                   Monthly Income (KES)
                 </Label>
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger>
-                      <span className="text-gray-500">ⓘ</span>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>Your consistent monthly salary or income.</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger>
+                    <span className="text-gray-500">ⓘ</span>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Your consistent monthly salary or income.</p>
+                  </TooltipContent>
+                </Tooltip>
               </div>
               <Input
                 id="monthlyIncome"
@@ -147,16 +143,14 @@ export const IncomeModelingCard = ({ data, onUpdate }: IncomeModelingCardProps) 
                   <Label className="text-sm font-medium text-gray-700">
                     Seasonal Income Periods
                   </Label>
-                  <TooltipProvider>
-                    <Tooltip>
-                      <TooltipTrigger>
-                        <span className="text-gray-500">ⓘ</span>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>Add income for specific months when you earn.</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <span className="text-gray-500">ⓘ</span>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Add income for specific months when you earn.</p>
+                    </TooltipContent>
+                  </Tooltip>
                 </div>
                 <Button onClick={addSeasonalIncome} size="sm" variant="outline">
                   Add Period
@@ -205,16 +199,14 @@ export const IncomeModelingCard = ({ data, onUpdate }: IncomeModelingCardProps) 
                   <Label className="text-sm font-medium text-gray-700">
                     Gig Income Sources
                   </Label>
-                  <TooltipProvider>
-                    <Tooltip>
-                      <TooltipTrigger>
-                        <span className="text-gray-500">ⓘ</span>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>Add different types of gigs and their frequency.</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <span className="text-gray-500">ⓘ</span>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Add different types of gigs and their frequency.</p>
+                    </TooltipContent>
+                  </Tooltip>
                 </div>
                 <Button onClick={addGigIncome} size="sm" variant="outline">
                   Add Gig
@@ -261,16 +253,14 @@ export const IncomeModelingCard = ({ data, onUpdate }: IncomeModelingCardProps) 
                 <Label htmlFor="currentAge" className="text-sm font-medium text-gray-700">
                   Current Age
                 </Label>
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger>
-                      <span className="text-gray-500">ⓘ</span>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>Your current age to calculate years until retirement.</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger>
+                    <span className="text-gray-500">ⓘ</span>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Your current age to calculate years until retirement.</p>
+                  </TooltipContent>
+                </Tooltip>
               </div>
               <Input
                 id="currentAge"
@@ -288,16 +278,14 @@ export const IncomeModelingCard = ({ data, onUpdate }: IncomeModelingCardProps) 
                 <Label htmlFor="retirementAge" className="text-sm font-medium text-gray-700">
                   Retirement Age
                 </Label>
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger>
-                      <span className="text-gray-500">ⓘ</span>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>The age when you plan to retire.</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger>
+                    <span className="text-gray-500">ⓘ</span>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>The age when you plan to retire.</p>
+                  </TooltipContent>
+                </Tooltip>
               </div>
               <Input
                 id="retirementAge"
@@ -317,16 +305,14 @@ export const IncomeModelingCard = ({ data, onUpdate }: IncomeModelingCardProps) 
               <Label htmlFor="monthlyExpenses" className="text-sm font-medium text-gray-700">
                 Monthly Expenses (KES)
               </Label>
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger>
-                    <span className="text-gray-500">ⓘ</span>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>Your current monthly living expenses.</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger>
+                  <span className="text-gray-500">ⓘ</span>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Your current monthly living expenses.</p>
+                </TooltipContent>
+              </Tooltip>
             </div>
             <Input
               id="monthlyExpenses"
@@ -344,16 +330,14 @@ export const IncomeModelingCard = ({ data, onUpdate }: IncomeModelingCardProps) 
               <Label className="text-sm font-medium text-gray-700">
                 Contribution Percentage: {data.contributionPercentage}%
               </Label>
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger>
-                    <span className="text-gray-500">ⓘ</span>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>Percentage of income to save for retirement.</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger>
+                  <span className="text-gray-500">ⓘ</span>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Percentage of income to save for retirement.</p>
+                </TooltipContent>
+              </Tooltip>
             </div>
             <Slider
               value={[data.contributionPercentage]}
@@ -375,16 +359,14 @@ export const IncomeModelingCard = ({ data, onUpdate }: IncomeModelingCardProps) 
               <Label htmlFor="investmentRisk" className="text-sm font-medium text-gray-700">
                 Investment Risk Profile
               </Label>
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger>
-                    <span className="text-gray-500">ⓘ</span>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>Your comfort level with investment risk vs return.</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger>
+                  <span className="text-gray-500">ⓘ</span>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Your comfort level with investment risk vs return.</p>
+                </TooltipContent>
+              </Tooltip>
             </div>
             <Select value={data.investmentRisk} onValueChange={(value) => onUpdate({ investmentRisk: value as 'low' | 'medium' | 'high' })}>
               <SelectTrigger className="w-full mt-1">
