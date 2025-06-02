@@ -1,11 +1,32 @@
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import { PensionResults, PensionData } from "@/types/pension";
 
 interface DashboardChartsProps {
   results: PensionResults;
   pensionData: PensionData;
+}
+
+// Expected types (for reference, should be defined in @/types/pension)
+interface PensionResults {
+  projectionData: Array<{ age: number; balance: number; inflationAdjustedBalance?: number }>;
+  projectedCorpus: number;
+  scenarios: Array<{ scenario: string; probability: number; finalCorpus: number }>;
+  monthlyContribution: number;
+  yearsToRetirement: number;
+}
+
+interface PensionData {
+  incomeType: "monthly" | "seasonal" | "random";
+  monthlyIncome: number;
+  seasonalIncome?: number;
+  seasonsPerYear?: number;
+  averageGigIncome?: number;
+  gigsPerYear?: number;
+  currentAge: number;
+  retirementAge: number;
+  monthlyExpenses: number;
+  contributionPercentage: number;
 }
 
 export const DashboardCharts = ({ results, pensionData }: DashboardChartsProps) => {
@@ -19,13 +40,30 @@ export const DashboardCharts = ({ results, pensionData }: DashboardChartsProps) 
     }).format(value);
   };
 
+  // Dynamic colors for scenarios to avoid hardcoding
+  const getScenarioColor = (index: number) => {
+    const colors = [
+      '#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#EC4899',
+      '#6B7280', '#14B8A6', '#F97316', '#DC2626' // Extendable color palette
+    ];
+    return colors[index % colors.length]; // Cycle through colors if more scenarios
+  };
+
   // Prepare scenario data for pie chart
   const scenarioData = results.scenarios.map((scenario, index) => ({
     name: scenario.scenario,
     value: scenario.probability,
     corpus: scenario.finalCorpus,
-    color: ['#3B82F6', '#8B5CF6', '#EF4444'][index]
+    color: getScenarioColor(index)
   }));
+
+  // Calculate inflation-adjusted corpus dynamically (if inflationAdjustedBalance is unavailable)
+  const inflationAdjustedCorpus = results.projectionData.length > 0
+    ? results.projectionData[results.projectionData.length - 1].inflationAdjustedBalance ?? results.projectedCorpus
+    : results.projectedCorpus;
+
+  // Calculate recommended contribution dynamically (avoid hardcoding 1.2 multiplier)
+  const recommendedContribution = results.monthlyContribution * (1 + pensionData.contributionPercentage / 100);
 
   return (
     <div className="space-y-6">
@@ -53,8 +91,8 @@ export const DashboardCharts = ({ results, pensionData }: DashboardChartsProps) 
                   tickFormatter={formatCurrency}
                 />
                 <Tooltip 
-                  formatter={(value, name) => [formatCurrency(Number(value)), name]}
-                  labelFormatter={(age) => `Age: ${age}`}
+                  formatter={(value: number, name: string) => [formatCurrency(value), name]}
+                  labelFormatter={(age: number) => `Age: ${age}`}
                   contentStyle={{
                     backgroundColor: 'white',
                     border: '1px solid #e5e7eb',
@@ -69,15 +107,17 @@ export const DashboardCharts = ({ results, pensionData }: DashboardChartsProps) 
                   name="Projected Balance"
                   dot={{ fill: '#3B82F6', strokeWidth: 2, r: 4 }}
                 />
-                <Line 
-                  type="monotone" 
-                  dataKey="inflationAdjustedBalance" 
-                  stroke="#8B5CF6" 
-                  strokeWidth={2}
-                  strokeDasharray="5 5"
-                  name="Inflation Adjusted"
-                  dot={{ fill: '#8B5CF6', strokeWidth: 2, r: 3 }}
-                />
+                {results.projectionData.some(d => d.inflationAdjustedBalance !== undefined) && (
+                  <Line 
+                    type="monotone" 
+                    dataKey="inflationAdjustedBalance" 
+                    stroke="#8B5CF6" 
+                    strokeWidth={2}
+                    strokeDasharray="5 5"
+                    name="Inflation Adjusted"
+                    dot={{ fill: '#8B5CF6', strokeWidth: 2, r: 3 }}
+                  />
+                )}
               </LineChart>
             </ResponsiveContainer>
           </div>
@@ -88,9 +128,7 @@ export const DashboardCharts = ({ results, pensionData }: DashboardChartsProps) 
             </div>
             <div className="bg-purple-50 rounded-lg p-3">
               <div className="text-xs text-purple-600">Inflation Adjusted</div>
-              <div className="font-bold text-purple-800">
-                {formatCurrency(results.projectedCorpus * Math.pow(0.945, pensionData.retirementAge - pensionData.currentAge))}
-              </div>
+              <div className="font-bold text-purple-800">{formatCurrency(inflationAdjustedCorpus)}</div>
             </div>
           </div>
         </CardContent>
@@ -123,7 +161,7 @@ export const DashboardCharts = ({ results, pensionData }: DashboardChartsProps) 
                     ))}
                   </Pie>
                   <Tooltip 
-                    formatter={(value, name) => [`${value}%`, 'Probability']}
+                    formatter={(value: number, name: string) => [`${value}%`, 'Probability']}
                     contentStyle={{
                       backgroundColor: 'white',
                       border: '1px solid #e5e7eb',
@@ -175,10 +213,10 @@ export const DashboardCharts = ({ results, pensionData }: DashboardChartsProps) 
               <div className="bg-orange-50 rounded-lg p-4">
                 <div className="text-sm text-orange-600 font-medium">Recommended Monthly</div>
                 <div className="text-xl font-bold text-orange-800">
-                  {formatCurrency(results.monthlyContribution * 1.2)}
+                  {formatCurrency(recommendedContribution)}
                 </div>
                 <div className="text-xs text-orange-600 mt-1">
-                  For better retirement security
+                  Based on {Math.round(pensionData.contributionPercentage * 2)}% of income
                 </div>
               </div>
 
