@@ -1,29 +1,12 @@
 import { PensionData, PensionResults, ProjectionDataPoint, ScenarioResult } from "@/types/pension";
 
-// Extend PensionData to include economic assumptions
-interface PensionData {
-  incomeType: "monthly" | "seasonal" | "random";
-  monthlyIncome: number;
-  seasonalIncome?: number;
-  seasonsPerYear?: number;
-  averageGigIncome?: number;
-  gigsPerYear?: number;
-  currentAge: number;
-  retirementAge: number;
-  monthlyExpenses: number;
-  contributionPercentage: number;
-  investmentRisk: "low" | "medium" | "high";
-  inflationRate?: number; // e.g., 0.055 for 5.5%
-  withdrawalRate?: number; // e.g., 0.04 for 4%
-  postRetirementExpenseRatio?: number; // e.g., 0.8 for 80%
-}
-
 export const calculatePensionProjection = (data: PensionData): PensionResults => {
   // Default assumptions if not provided
   const defaults = {
-    inflationRate: 0.055,
-    withdrawalRate: 0.04,
-    postRetirementExpenseRatio: 0.8,
+    inflationRate: 0.055, // 5.5%
+    withdrawalRate: 0.04, // 4%
+    postRetirementExpenseRatio: 0.8, // 80%
+    lifeExpectancy: 80, // years
   };
 
   // Use provided or default values
@@ -32,15 +15,31 @@ export const calculatePensionProjection = (data: PensionData): PensionResults =>
   const postRetirementExpenseRatio = data.postRetirementExpenseRatio ?? defaults.postRetirementExpenseRatio;
 
   // Validate inputs
-  if (
-    data.currentAge < 18 ||
-    data.retirementAge < data.currentAge ||
-    data.monthlyIncome < 0 ||
-    data.contributionPercentage < 0 ||
-    data.monthlyExpenses < 0 ||
-    !["low", "medium", "high"].includes(data.investmentRisk)
-  ) {
-    throw new Error("Invalid input data: Check age, income, contribution percentage, or risk profile.");
+  const errors: string[] = [];
+  if (data.currentAge < 18) errors.push("Current age must be at least 18.");
+  if (data.retirementAge < data.currentAge) errors.push("Retirement age must be at least current age.");
+  if (data.monthlyExpenses < 0) errors.push("Monthly expenses cannot be negative.");
+  if (data.contributionPercentage < 0 || data.contributionPercentage > 100)
+    errors.push("Contribution percentage must be between 0 and 100.");
+  if (!["low", "medium", "high"].includes(data.investmentRisk)) errors.push("Invalid investment risk profile.");
+  if (data.incomeType === "monthly" && (data.monthlyIncome == null || data.monthlyIncome < 0))
+    errors.push("Monthly income is required and cannot be negative for monthly income type.");
+  if (data.incomeType === "seasonal" && (!data.seasonalIncomes || data.seasonalIncomes.length === 0))
+    errors.push("Seasonal incomes are required for seasonal income type.");
+  if (data.incomeType === "random" && (!data.gigIncomes || data.gigIncomes.length === 0))
+    errors.push("Gig incomes are required for random income type.");
+
+  if (errors.length > 0) {
+    return {
+      projectedCorpus: 0,
+      requiredCorpus: 0,
+      monthlyContribution: 0,
+      fundingGap: 0,
+      yearsToRetirement: 0,
+      projectionData: [],
+      scenarios: [],
+      error: errors.join(" "),
+    };
   }
 
   const yearsToRetirement = Math.max(data.retirementAge - data.currentAge, 0);
@@ -49,17 +48,19 @@ export const calculatePensionProjection = (data: PensionData): PensionResults =>
   // Calculate annual income based on income type
   let annualIncome = 0;
   if (data.incomeType === "monthly") {
-    annualIncome = data.monthlyIncome * 12;
+    annualIncome = (data.monthlyIncome || 0) * 12;
   } else if (data.incomeType === "seasonal") {
-    annualIncome = (data.seasonalIncome || 0) * (data.seasonsPerYear || 1);
+    annualIncome = data.seasonalIncomes?.reduce((sum, si) => sum + (si.amount || 0), 0) || 0;
   } else if (data.incomeType === "random") {
-    annualIncome = (data.averageGigIncome || 0) * (data.gigsPerYear || 1);
+    annualIncome =
+      data.gigIncomes?.reduce((sum, gi) => sum + (gi.amount || 0) * (gi.frequencyPerYear || 1), 0) || 0;
   }
 
+  // Calculate monthly contribution
   const monthlyContribution = (annualIncome * data.contributionPercentage) / 100 / 12;
 
   // Investment return rates based on risk profile
-  const returnRates = {
+  const returnRates: Record<RiskProfile, number> = {
     low: 0.07, // Average of 6-8%
     medium: 0.10, // Average of 8-12%
     high: 0.135, // Average of 12-15%
@@ -69,12 +70,14 @@ export const calculatePensionProjection = (data: PensionData): PensionResults =>
 
   // Calculate future value of monthly contributions
   const futureValue =
-    monthlyContribution *
-    ((Math.pow(1 + monthlyReturn, monthsToRetirement) - 1) / monthlyReturn);
+    monthsToRetirement === 0
+      ? 0
+      : monthlyContribution * ((Math.pow(1 + monthlyReturn, monthsToRetirement) - 1) / monthlyReturn);
 
   // Calculate required corpus
   const annualExpensesAtRetirement = data.monthlyExpenses * 12 * postRetirementExpenseRatio;
-  const inflationAdjustedExpenses = annualExpensesAtRetirement * Math.pow(1 + inflationRate, yearsToRetirement);
+  const inflationAdjustedExpenses =
+    annualExpensesAtRetirement * Math.pow(1 + inflationRate, yearsToRetirement);
   const requiredCorpus = inflationAdjustedExpenses / withdrawalRate;
 
   // Calculate funding gap
@@ -103,9 +106,9 @@ export const calculatePensionProjection = (data: PensionData): PensionResults =>
     });
   }
 
-  // Generate scenario results (simplified Monte Carlo with dynamic risk alignment)
-  const scenarioMultipliers = {
-    low: [0.85, 1.0, 1.15], // Conservative, Expected, Optimistic for low risk
+  // Generate scenario results
+  const scenarioMultipliers: Record<RiskProfile, [number, number, number]> = {
+    low: [0.85, 1.0, 1.15], // Conservative, Expected, Optimistic
     medium: [0.90, 1.0, 1.20],
     high: [0.80, 1.0, 1.30], // Wider range for higher risk
   };
