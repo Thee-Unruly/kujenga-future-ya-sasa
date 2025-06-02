@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { PensionResults } from "@/types/pension";
@@ -45,12 +45,7 @@ export const ResultsSummary = ({ results }: ResultsSummaryProps) => {
             <div className="grid md:grid-cols-2 gap-6">
               {/* Left Column - Key Numbers */}
               <div className="space-y-4">
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.5 }}
-                  className="bg-blue-50 rounded-lg p-4"
-                >
+                <div className="bg-blue-50 rounded-lg p-4 animate-fade-in">
                   <div className="flex items-center gap-2">
                     <div className="text-sm text-blue-600 font-medium">Projected Corpus</div>
                     <TooltipProvider>
@@ -70,14 +65,9 @@ export const ResultsSummary = ({ results }: ResultsSummaryProps) => {
                   <div className="text-xs text-blue-600 mt-1">
                     At retirement ({results.yearsToRetirement} years)
                   </div>
-                </motion.div>
+                </div>
 
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.5, delay: 0.1 }}
-                  className="bg-purple-50 rounded-lg p-4"
-                >
+                <div className="bg-purple-50 rounded-lg p-4 animate-fade-in" style={{ animationDelay: '0.1s' }}>
                   <div className="flex items-center gap-2">
                     <div className="text-sm text-purple-600 font-medium">Required Corpus</div>
                     <TooltipProvider>
@@ -97,14 +87,9 @@ export const ResultsSummary = ({ results }: ResultsSummaryProps) => {
                   <div className="text-xs text-purple-600 mt-1">
                     For comfortable retirement
                   </div>
-                </motion.div>
+                </div>
 
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.5, delay: 0.2 }}
-                  className="bg-gray-50 rounded-lg p-4"
-                >
+                <div className="bg-gray-50 rounded-lg p-4 animate-fade-in" style={{ animationDelay: '0.2s' }}>
                   <div className="flex items-center gap-2">
                     <div className="text-sm text-gray-600 font-medium">Monthly Contribution</div>
                     <TooltipProvider>
@@ -124,17 +109,12 @@ export const ResultsSummary = ({ results }: ResultsSummaryProps) => {
                   <div className="text-xs text-gray-600 mt-1">
                     Current contribution amount
                   </div>
-                </motion.div>
+                </div>
               </div>
 
               {/* Right Column - Gap Analysis */}
               <div className="space-y-4">
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.5 }}
-                  className={`${isShortfall ? 'bg-red-50' : 'bg-green-50'} rounded-lg p-4`}
-                >
+                <div className={`${isShortfall ? 'bg-red-50' : 'bg-green-50'} rounded-lg p-4 animate-fade-in`}>
                   <div className="flex items-center gap-2">
                     <div className={`text-sm font-medium ${isShortfall ? 'text-red-600' : 'text-green-600'}`}>
                       {isShortfall ? 'Funding Shortfall' : 'Surplus'}
@@ -160,15 +140,10 @@ export const ResultsSummary = ({ results }: ResultsSummaryProps) => {
                   <div className={`text-xs mt-1 ${isShortfall ? 'text-red-600' : 'text-green-600'}`}>
                     {isShortfall ? `${fundingGapPercentage.toFixed(1)}% below target` : 'Above target!'}
                   </div>
-                </motion.div>
+                </div>
 
                 {isShortfall && (
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.5, delay: 0.1 }}
-                    className="bg-orange-50 rounded-lg p-4"
-                  >
+                  <div className="bg-orange-50 rounded-lg p-4 animate-fade-in" style={{ animationDelay: '0.1s' }}>
                     <div className="flex items-center gap-2">
                       <div className="text-sm text-orange-600 font-medium">💡 Recommendation</div>
                       <TooltipProvider>
@@ -187,15 +162,10 @@ export const ResultsSummary = ({ results }: ResultsSummaryProps) => {
                       <span className="font-medium">{formatCurrency(recommendedContribution)}</span>{" "}
                       per month to meet your retirement goal.
                     </div>
-                  </motion.div>
+                  </div>
                 )}
 
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.5, delay: 0.2 }}
-                  className="bg-gray-100 rounded-lg p-4"
-                >
+                <div className="bg-gray-100 rounded-lg p-4 animate-fade-in" style={{ animationDelay: '0.2s' }}>
                   <div className="flex items-center gap-2">
                     <div className="text-sm text-gray-600 font-medium mb-2">Goal Achievement</div>
                     <TooltipProvider>
@@ -210,17 +180,15 @@ export const ResultsSummary = ({ results }: ResultsSummaryProps) => {
                     </TooltipProvider>
                   </div>
                   <div className="w-full bg-gray-200 rounded-full h-3">
-                    <motion.div
-                      className={`h-3 rounded-full ${isShortfall ? 'bg-red-500' : 'bg-green-500'}`}
-                      initial={{ width: 0 }}
-                      animate={{ width: `${fundingGapPercentage}%` }}
-                      transition={{ duration: 0.5 }}
-                    ></motion.div>
+                    <div
+                      className={`h-3 rounded-full transition-all duration-500 ${isShortfall ? 'bg-red-500' : 'bg-green-500'}`}
+                      style={{ width: `${fundingGapPercentage}%` }}
+                    ></div>
                   </div>
                   <div className="text-xs text-gray-600 mt-1">
                     {fundingGapPercentage.toFixed(1)}% of target
                   </div>
-                </motion.div>
+                </div>
               </div>
             </div>
           )}
