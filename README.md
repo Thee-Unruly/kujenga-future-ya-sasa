@@ -1,73 +1,78 @@
-# Welcome to your Lovable project
+# 🧓💼 PensionSim Kenya: Retirement Planning for the Self-Employed
 
-## Project info
+**PensionSim Kenya** is a personalized, simulation-based retirement planning tool designed specifically for gig workers, freelancers, small business owners, and informal sector workers—especially in underserved markets like Kenya. The platform enables users with irregular incomes to plan for retirement intelligently using actuarial models, scenario simulations, and personalized financial projections.
 
-**URL**: https://lovable.dev/projects/e88c6295-42c7-46f6-95cd-08912a25e727
+---
 
-## How can I edit this code?
+## 📌 Problem Statement
 
-There are several ways of editing your application.
+> Traditional pension tools assume stable monthly incomes and employer-based contributions.  
+> In contrast, self-employed individuals often face:
+- Irregular or seasonal earnings  
+- Lack of formal pension structures (e.g., NSSF enrollment)  
+- Limited financial planning literacy  
+- No access to personalized pension advice  
 
-**Use Lovable**
+---
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/e88c6295-42c7-46f6-95cd-08912a25e727) and start prompting.
+## 💡 Solution
 
-Changes made via Lovable will be committed automatically to this repo.
+PensionSim Kenya bridges the pension accessibility gap by providing:
+- 💰 **Flexible income modeling** (seasonal, monthly, or ad-hoc)  
+- 📈 **Personalized contribution advice** based on life goals  
+- 🔁 **Scenario simulations** (life expectancy, inflation, investment volatility)  
+- 📊 **Visual dashboards** of projected corpus and savings gaps  
+- 🧮 **Comparison tools** for NSSF, private pensions, or self-managed portfolios  
 
-**Use your preferred IDE**
+---
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+## 🔧 Features
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+- **Dynamic Income Tracking** – Accepts irregular user income data  
+- **Contribution Recommendations** – Suggests how much to save monthly  
+- **Monte Carlo Simulations** – Accounts for market volatility  
+- **Life Expectancy Modeling** – Uses WHO or national life tables  
+- **Inflation-Proof Projections** – Adjusts retirement corpus with CPI data  
+- **Funding Gap Analysis** – Highlights how far a user is from their target  
 
-Follow these steps:
+---
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+## 📊 Data Inputs
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+| Input              | Description                           | Source              |
+|-------------------|---------------------------------------|---------------------|
+| Income            | Monthly/Seasonal/Annual income         | User or M-Pesa data |
+| Expenses          | Optional                               | User input          |
+| Retirement Age    | Target age                             | User input          |
+| Life Expectancy   | Demographic estimate                   | WHO / KNBS          |
+| Inflation Rate    | Historical + projected                 | CBK / KNBS          |
+| Investment Returns| Simulated (low/med/high risk)          | Assumptions / Market data |
 
-# Step 3: Install the necessary dependencies.
-npm i
+---
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+## 🔢 Core Actuarial Models
 
-**Edit a file directly in GitHub**
+- 📉 Present Value of Annuities and Lump Sum Needs  
+- 🎲 Monte Carlo Simulation (for returns & inflation)  
+- 🧬 Life Expectancy Forecasting  
+- 💸 Stochastic Contribution Flow Modeling  
+- 📐 Funding Gap Estimation  
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+---
 
-**Use GitHub Codespaces**
+## 🖥️ Tech Stack
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+- **Frontend**: Streamlit or React (TBD)  
+- **Backend**: Python (Pandas, NumPy, SciPy)  
+- **Modeling**: Monte Carlo, actuarial functions  
+- **Data**: WHO life tables, CBK inflation data, sample fund returns  
+- **Deployment**: Streamlit Cloud / GitHub Pages / Heroku  
 
-## What technologies are used for this project?
+---
 
-This project is built with:
+## 🚀 How to Use
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/e88c6295-42c7-46f6-95cd-08912a25e727) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+```bash
+# Clone the repo
+git clone https://github.com/yourusername/SmartPension.git
+cd SmartPension
