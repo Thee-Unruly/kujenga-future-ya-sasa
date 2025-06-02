@@ -1,5 +1,5 @@
+
 import { useMemo } from "react";
-import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -9,25 +9,6 @@ import { PensionData } from "@/types/pension";
 interface ScenarioSimulationProps {
   data: PensionData;
   onUpdate: (data: Partial<PensionData>) => void;
-}
-
-// Extend PensionData to include economic assumptions
-interface PensionData {
-  incomeType: "monthly" | "seasonal" | "random";
-  monthlyIncome: number;
-  seasonalIncome?: number;
-  seasonsPerYear?: number;
-  averageGigIncome?: number;
-  gigsPerYear?: number;
-  currentAge: number;
-  retirementAge: number;
-  monthlyExpenses: number;
-  contributionPercentage: number;
-  investmentRisk: "low" | "medium" | "high";
-  inflationRate?: number; // e.g., 0.055 for 5.5%
-  lifeExpectancy?: number; // e.g., 75
-  salaryGrowthRate?: number; // e.g., 0.03 for 3%
-  postRetirementExpenseRatio?: number; // e.g., 0.8 for 80%
 }
 
 export const ScenarioSimulation = ({ data, onUpdate }: ScenarioSimulationProps) => {
@@ -61,11 +42,11 @@ export const ScenarioSimulation = ({ data, onUpdate }: ScenarioSimulationProps) 
     const avgReturn = (riskProfiles[data.investmentRisk].return[0] + riskProfiles[data.investmentRisk].return[1]) / 2;
     let annualIncome = 0;
     if (data.incomeType === "monthly") {
-      annualIncome = data.monthlyIncome * 12;
+      annualIncome = (data.monthlyIncome || 0) * 12;
     } else if (data.incomeType === "seasonal") {
-      annualIncome = (data.seasonalIncome || 0) * (data.seasonsPerYear || 1);
+      annualIncome = data.seasonalIncomes?.reduce((sum, si) => sum + (si.amount || 0), 0) || 0;
     } else if (data.incomeType === "random") {
-      annualIncome = (data.averageGigIncome || 0) * (data.gigsPerYear || 1);
+      annualIncome = data.gigIncomes?.reduce((sum, gi) => sum + (gi.amount || 0) * (gi.frequencyPerYear || 1), 0) || 0;
     }
     const annualContribution = (annualIncome * data.contributionPercentage) / 100;
     // Simplified compound interest: FV = PV * (1 + r)^n
@@ -75,10 +56,8 @@ export const ScenarioSimulation = ({ data, onUpdate }: ScenarioSimulationProps) 
     data.investmentRisk,
     data.incomeType,
     data.monthlyIncome,
-    data.seasonalIncome,
-    data.seasonsPerYear,
-    data.averageGigIncome,
-    data.gigsPerYear,
+    data.seasonalIncomes,
+    data.gigIncomes,
     data.contributionPercentage,
     data.currentAge,
     data.retirementAge,
@@ -99,22 +78,11 @@ export const ScenarioSimulation = ({ data, onUpdate }: ScenarioSimulationProps) 
   const formatPercentage = (value: number) => `${(value * 100).toFixed(1)}%`;
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3 }}
-    >
+    <div className="animate-fade-in">
       <Card className="bg-gradient-to-br from-white to-gray-50 backdrop-blur-md border-0 shadow-lg hover:shadow-xl transition-shadow duration-200">
         <CardHeader className="pb-4">
           <CardTitle className="flex items-center gap-2 text-lg">
-            <motion.span
-              className="text-purple-600"
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ delay: 0.2 }}
-            >
-              📊
-            </motion.span>
+            <span className="text-purple-600 animate-scale-in">📊</span>
             Investment Scenarios
           </CardTitle>
         </CardHeader>
@@ -163,12 +131,7 @@ export const ScenarioSimulation = ({ data, onUpdate }: ScenarioSimulationProps) 
           </div>
 
           {/* Economic Assumptions */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5 }}
-            className="bg-gray-50 rounded-lg p-4 space-y-3"
-          >
+          <div className="bg-gray-50 rounded-lg p-4 space-y-3 animate-fade-in">
             <h4 className="font-medium text-gray-800 text-sm">Economic Assumptions</h4>
             <div className="grid grid-cols-2 gap-4 text-xs">
               <div className="flex items-center gap-1">
@@ -228,15 +191,10 @@ export const ScenarioSimulation = ({ data, onUpdate }: ScenarioSimulationProps) 
                 </TooltipProvider>
               </div>
             </div>
-          </motion.div>
+          </div>
 
           {/* Projected Savings */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5 }}
-            className="bg-blue-50 rounded-lg p-4"
-          >
+          <div className="bg-blue-50 rounded-lg p-4 animate-fade-in">
             <h4 className="font-medium text-blue-800 text-sm mb-2">Projected Savings</h4>
             <p className="text-sm font-medium text-blue-700">
               Estimated Retirement Corpus: <span className="font-bold">KES {projectedSavings.toLocaleString()}</span>
@@ -245,20 +203,15 @@ export const ScenarioSimulation = ({ data, onUpdate }: ScenarioSimulationProps) 
               Based on {formatPercentage(riskProfiles[data.investmentRisk].return[0])} -{" "}
               {formatPercentage(riskProfiles[data.investmentRisk].return[1])} expected return
             </p>
-          </motion.div>
+          </div>
 
           {/* Dynamic Smart Tip */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5 }}
-            className="bg-green-50 rounded-lg p-4"
-          >
+          <div className="bg-green-50 rounded-lg p-4 animate-fade-in">
             <h4 className="font-medium text-green-800 text-sm mb-2">💡 Smart Tip</h4>
             <p className="text-xs text-green-700">{smartTip}</p>
-          </motion.div>
+          </div>
         </CardContent>
       </Card>
-    </motion.div>
+    </div>
   );
 };
