@@ -1,5 +1,4 @@
 import { useState, useMemo } from "react";
-import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -10,20 +9,6 @@ import { PensionData } from "@/types/pension";
 interface IncomeModelingCardProps {
   data: PensionData;
   onUpdate: (data: Partial<PensionData>) => void;
-}
-
-// Extend PensionData to support seasonal and random income types
-interface PensionData {
-  incomeType: "monthly" | "seasonal" | "random";
-  monthlyIncome: number;
-  seasonalIncome?: number;
-  seasonsPerYear?: number;
-  averageGigIncome?: number;
-  gigsPerYear?: number;
-  currentAge: number;
-  retirementAge: number;
-  monthlyExpenses: number;
-  contributionPercentage: number;
 }
 
 export const IncomeModelingCard = ({ data, onUpdate }: IncomeModelingCardProps) => {
@@ -80,22 +65,11 @@ export const IncomeModelingCard = ({ data, onUpdate }: IncomeModelingCardProps) 
   ]);
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3 }}
-    >
+    <div className="animate-fade-in">
       <Card className="bg-gradient-to-br from-white to-gray-50 backdrop-blur-md border-0 shadow-lg hover:shadow-xl transition-shadow duration-200">
         <CardHeader className="pb-4">
           <CardTitle className="flex items-center gap-2 text-lg">
-            <motion.span
-              className="text-blue-600"
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ delay: 0.2 }}
-            >
-              💰
-            </motion.span>
+            <span className="text-blue-600 animate-scale-in">💰</span>
             Income Modeling
           </CardTitle>
         </CardHeader>
@@ -135,10 +109,8 @@ export const IncomeModelingCard = ({ data, onUpdate }: IncomeModelingCardProps) 
           </div>
 
           {data.incomeType === "monthly" && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              transition={{ duration: 0.3 }}
+            <div
+              className="animate-fade-in"
             >
               <div className="flex items-center gap-2">
                 <Label htmlFor="monthlyIncome" className="text-sm font-medium text-gray-700">
@@ -169,18 +141,16 @@ export const IncomeModelingCard = ({ data, onUpdate }: IncomeModelingCardProps) 
                 <p className="text-xs text-red-500 mt-1">{errors.monthlyIncome}</p>
               )}
               <p className="text-xs text-gray-500 mt-1">Your average monthly income</p>
-            </motion.div>
+            </div>
           )}
 
           {data.incomeType === "seasonal" && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              transition={{ duration: 0.3 }}
+            <div
+              className="animate-fade-in"
             >
               <div className="space-y-4">
                 <div>
-                  <div className="flex items-center gap泡-2">
+                  <div className="flex items-center gap-2">
                     <Label htmlFor="seasonalIncome" className="text-sm font-medium text-gray-700">
                       Seasonal Income (KES)
                     </Label>
@@ -244,14 +214,12 @@ export const IncomeModelingCard = ({ data, onUpdate }: IncomeModelingCardProps) 
                   <p className="text-xs text-gray-500 mt-1">Number of seasons per year</p>
                 </div>
               </div>
-            </motion.div>
+            </div>
           )}
 
           {data.incomeType === "random" && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              transition={{ duration: 0.3 }}
+            <div
+              className="animate-fade-in"
             >
               <div className="space-y-4">
                 <div>
@@ -318,7 +286,7 @@ export const IncomeModelingCard = ({ data, onUpdate }: IncomeModelingCardProps) 
                   <p className="text-xs text-gray-500 mt-1">Number of gigs per year</p>
                 </div>
               </div>
-            </motion.div>
+            </div>
           )}
 
           <div className="grid grid-cols-2 gap-4">
@@ -401,23 +369,22 @@ export const IncomeModelingCard = ({ data, onUpdate }: IncomeModelingCardProps) 
                   <TooltipContent>
                     <p>Your current monthly living expenses.</p>
                   </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            </div>
-            <Input
-              id="monthlyExpenses"
-              type="number"
-              value={data.monthlyExpenses}
-              onChange={(e) => handleInputChange("monthlyExpenses", Number(e.target.value))}
-              className={`mt-1 bg-white focus:ring-2 focus:ring-blue-500 transition-all duration-150 ${
-                errors.monthlyExpenses ? "border-red-500" : ""
-              }`}
-              placeholder="30,000"
-            />
-            {errors.monthlyExpenses && (
-              <p className="text-xs text-red-500 mt-1">{errors.monthlyExpenses}</p>
-            )}
-            <p className="text-xs text-gray-500 mt-1">Your current monthly living expenses</p>
+                </TooltipProvider>
+              </div>
+              <Input
+                id="monthlyExpenses"
+                type="number"
+                value={data.monthlyExpenses}
+                onChange={(e) => handleInputChange("monthlyExpenses", Number(e.target.value))}
+                className={`mt-1 bg-white focus:ring-2 focus:ring-blue-500 transition-all duration-150 ${
+                  errors.monthlyExpenses ? "border-red-500" : ""
+                }`}
+                placeholder="30,000"
+              />
+              {errors.monthlyExpenses && (
+                <p className="text-xs text-red-500 mt-1">{errors.monthlyExpenses}</p>
+              )}
+              <p className="text-xs text-gray-500 mt-1">Your current monthly living expenses</p>
           </div>
 
           <div>
@@ -433,32 +400,28 @@ export const IncomeModelingCard = ({ data, onUpdate }: IncomeModelingCardProps) 
                   <TooltipContent>
                     <p>Percentage of income to save for retirement.</p>
                   </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
+                </TooltipProvider>
+              </div>
+              <Input
+                id="contributionPercentage"
+                type="number"
+                value={data.contributionPercentage}
+                onChange={(e) => handleInputChange("contributionPercentage", Number(e.target.value))}
+                className={`mt-1 bg-white focus:ring-2 focus:ring-blue-500 transition-all duration-150 ${
+                  errors.contributionPercentage ? "border-red-500" : ""
+                }`}
+                min="5"
+                max="50"
+                placeholder="15"
+              />
+              {errors.contributionPercentage && (
+                <p className="text-xs text-red-500 mt-1">{errors.contributionPercentage}</p>
+              )}
+              <p className="text-xs text-gray-500 mt-1">Percentage of income to save for retirement</p>
             </div>
-            <Input
-              id="contributionPercentage"
-              type="number"
-              value={data.contributionPercentage}
-              onChange={(e) => handleInputChange("contributionPercentage", Number(e.target.value))}
-              className={`mt-1 bg-white focus:ring-2 focus:ring-blue-500 transition-all duration-150 ${
-                errors.contributionPercentage ? "border-red-500" : ""
-              }`}
-              min="5"
-              max="50"
-              placeholder="15"
-            />
-            {errors.contributionPercentage && (
-              <p className="text-xs text-red-500 mt-1">{errors.contributionPercentage}</p>
-            )}
-            <p className="text-xs text-gray-500 mt-1">Percentage of income to save for retirement</p>
-          </div>
 
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5 }}
-            className="pt-4"
+          <div
+            className="animate-fade-in pt-4"
           >
             <p className="text-sm font-medium text-gray-700">
               Estimated Retirement Savings:{" "}
@@ -467,9 +430,9 @@ export const IncomeModelingCard = ({ data, onUpdate }: IncomeModelingCardProps) 
             <p className="text-xs text-gray-500 mt-1">
               Based on current inputs (simplified calculation)
             </p>
-          </motion.div>
+          
         </CardContent>
       </Card>
-    </motion.div>
+    
   );
 };

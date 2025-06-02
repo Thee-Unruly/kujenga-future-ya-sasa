@@ -30,22 +30,11 @@ export const ResultsSummary = ({ results }: ResultsSummaryProps) => {
     : results.monthlyContribution;
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3 }}
-    >
+    <div className="animate-fade-in">
       <Card className="bg-gradient-to-br from-white to-gray-50 backdrop-blur-md border-0 shadow-lg hover:shadow-xl transition-shadow duration-200">
         <CardHeader className="pb-4">
           <CardTitle className="flex items-center gap-2 text-xl">
-            <motion.span
-              className="text-green-600"
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ delay: 0.2 }}
-            >
-              🎯
-            </motion.span>
+            <span className="text-green-600 animate-scale-in">🎯</span>
             Retirement Projection Summary
           </CardTitle>
         </CardHeader>
@@ -237,6 +226,6 @@ export const ResultsSummary = ({ results }: ResultsSummaryProps) => {
           )}
         </CardContent>
       </Card>
-    </motion.div>
+    </div>
   );
 };

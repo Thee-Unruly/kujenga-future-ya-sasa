@@ -7,28 +7,6 @@ interface DashboardChartsProps {
   pensionData: PensionData;
 }
 
-// Expected types (for reference, should be defined in @/types/pension)
-interface PensionResults {
-  projectionData: Array<{ age: number; balance: number; inflationAdjustedBalance?: number }>;
-  projectedCorpus: number;
-  scenarios: Array<{ scenario: string; probability: number; finalCorpus: number }>;
-  monthlyContribution: number;
-  yearsToRetirement: number;
-}
-
-interface PensionData {
-  incomeType: "monthly" | "seasonal" | "random";
-  monthlyIncome: number;
-  seasonalIncome?: number;
-  seasonsPerYear?: number;
-  averageGigIncome?: number;
-  gigsPerYear?: number;
-  currentAge: number;
-  retirementAge: number;
-  monthlyExpenses: number;
-  contributionPercentage: number;
-}
-
 export const DashboardCharts = ({ results, pensionData }: DashboardChartsProps) => {
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat('en-KE', {

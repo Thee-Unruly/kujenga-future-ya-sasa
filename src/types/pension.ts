@@ -1,6 +1,7 @@
+
 // Define constrained types for clarity
-type IncomeType = 'monthly' | 'seasonal' | 'random';
-type RiskProfile = 'low' | 'medium' | 'high';
+export type IncomeType = 'monthly' | 'seasonal' | 'random';
+export type RiskProfile = 'low' | 'medium' | 'high';
 type Month =
   | 'January'
   | 'February'
@@ -20,6 +21,10 @@ export interface PensionData {
   monthlyIncome?: number; // Optional for seasonal/random
   seasonalIncomes?: SeasonalIncome[]; // Optional for seasonal
   gigIncomes?: GigIncome[]; // Optional for random
+  seasonalIncome?: number; // For seasonal income type
+  seasonsPerYear?: number; // For seasonal income type
+  averageGigIncome?: number; // For random income type
+  gigsPerYear?: number; // For random income type
   currentAge: number; // Should be >= 18
   retirementAge: number; // Should be >= currentAge
   monthlyExpenses: number; // Should be >= 0
@@ -29,6 +34,7 @@ export interface PensionData {
   withdrawalRate?: number; // e.g., 0.04 for 4%
   postRetirementExpenseRatio?: number; // e.g., 0.8 for 80%
   lifeExpectancy?: number; // e.g., 80 years
+  salaryGrowthRate?: number; // e.g., 0.03 for 3%
 }
 
 export interface SeasonalIncome {

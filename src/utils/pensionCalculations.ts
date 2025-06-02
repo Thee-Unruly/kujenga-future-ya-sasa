@@ -1,4 +1,4 @@
-import { PensionData, PensionResults, ProjectionDataPoint, ScenarioResult } from "@/types/pension";
+import { PensionData, PensionResults, ProjectionDataPoint, ScenarioResult, RiskProfile } from "@/types/pension";
 
 export const calculatePensionProjection = (data: PensionData): PensionResults => {
   // Default assumptions if not provided
